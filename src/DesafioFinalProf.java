@@ -8,9 +8,7 @@ public class DesafioFinalProf {
     static final int TOTAL_AVALIACOES = 3;
     static final String[] NOMES_AVALIACOES = {"A1", "A2", "A3"};
     static final double[] NOTA_MAX_AVALIACOES = {30.00, 30.00, 40.00};
-
     static double[] notas = new double[TOTAL_AVALIACOES];
-
     static double notaFinal = 0.0;
 
 
@@ -20,9 +18,10 @@ public class DesafioFinalProf {
      * @param mensagem O texto que aparecerá na tela
      * @return um número double representando a nota.
      */
+
     static double lerNota(String mensagem, double notaMaxima) {
 
-        double nota = 0.0;
+        double nota;
 
         do {
 
@@ -54,13 +53,13 @@ public class DesafioFinalProf {
      */
     static String avaliarSituacao(double notaFinal) {
 
-        if (notaFinal < 30) {
+        if (notaFinal < 30)
             return "REPROVADO";
-        } else if (notaFinal < 70) {
+        else if (notaFinal < 70)
             return "EM RECUPERAÇÃO";
-        } else {
+        else
             return "APROVADO";
-        }
+
     } // Fim do método avaliarSituacao()
 
 
@@ -95,6 +94,8 @@ public class DesafioFinalProf {
         System.out.printf("\nSua media foi de: %.2f ", calcularMedia(notas));
         System.out.printf("\nSua prova com maior nota foi a: %s ", maiorNota(notas));
         // Se estiver em recuperacao, uma prova a mais é feita
+        // Aproveitei a logica anterior para caso queira mudar
+        // a nota máxima e mínima, a lógica de "AI" continue funcionando
         if (avaliarSituacao(notaFinal).equalsIgnoreCase("EM RECUPERAÇÃO")) {
             System.out.print("\nColoque a nova nota da AI: ");
             double AI = console.nextDouble();
@@ -176,9 +177,7 @@ public class DesafioFinalProf {
         int maxIndex = 0;
 
         for (int i = 0; i < TOTAL_AVALIACOES - 1; i++) {
-            if (notas[i] > notas[i + 1]) {
-                maxIndex = i;
-            } else if (notas[i] < notas[i + 1]) {
+            if (notas[i] < notas[i + 1]) {
                 maxIndex = i + 1;
             } else {
                 maxIndex = i;
