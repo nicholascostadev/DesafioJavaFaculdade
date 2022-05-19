@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class DesafioFinalProf {
+public class DesafioFinalProf extends RuntimeException {
 
 
     static Scanner console = new Scanner(System.in);
@@ -10,6 +10,8 @@ public class DesafioFinalProf {
     static final double[] NOTA_MAX_AVALIACOES = {30.00, 30.00, 40.00};
     static double[] notas = new double[TOTAL_AVALIACOES];
     static double notaFinal = 0.0;
+
+    static boolean hasAlreadyTaken = false;
 
 
     /**
@@ -74,33 +76,52 @@ public class DesafioFinalProf {
 
         for (int i = 0; i < TOTAL_AVALIACOES; i++) {
 
-            System.out.printf("\nAvaliacao %s = %.2f pts", NOMES_AVALIACOES[i], notas[i]);
+            System.out.printf("Avaliacao %s = %.2f pts\n", NOMES_AVALIACOES[i], notas[i]);
             notaFinal += notas[i];
 
         }
     }
 
     static void gerarProvaAI() {
-        System.out.print("\nColoque a nova nota da AI: ");
-        double AI = console.nextDouble();
-        notas[menorNota(notas)] = AI;
+        System.out.println("\nVoce esta apto a fazer a prova AI");
+        double AI = lerNota("\nInforme a nota da AI", NOTA_MAX_AVALIACOES[indexMenorNota(notas)]);
+
+        /*
+         * Verifica se a nova nota é maior que a anterior, se sim, atribui o valor à "notas"
+         * se não, atribui-se seu próprio valor, para não alterá-lo.
+         */
+        notas[indexMenorNota(notas)] = Math.max(notas[indexMenorNota(notas)], AI);
+
         calcularTotal();
+        hasAlreadyTaken = true;
+
     }
 
     static void mostrarSituacaoCompleta() {
         System.out.printf("\n\nNota Final = %.2f pts", notaFinal);
-        System.out.printf("\nSituacao = %s, sua menor nota foi de %.2f pontos", avaliarSituacao(notaFinal), notas[menorNota(notas)]);
+        System.out.printf("\nSituacao = %s, sua menor nota foi de %.2f pontos", avaliarSituacao(notaFinal), notas[indexMenorNota(notas)]);
         System.out.printf("\nSua media foi de: %.2f ", calcularMedia(notas));
-        System.out.printf("\nSua prova com maior nota foi a: %s ", maiorNota(notas));
+        System.out.printf("\nSua prova com maior nota foi a: %s\n", maiorNota(notas));
     }
 
 
     static void mostrarNotas() {
-
-
-        System.out.println("\n\t\tNOTAS");
-        System.out.println();
-
+        System.out.print("""
+                \n
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                -----------------------------------------
+                |               Notas                   |
+                -----------------------------------------
+                """);
         calcularTotal();
 
         mostrarSituacaoCompleta();
@@ -116,12 +137,16 @@ public class DesafioFinalProf {
          * Aproveitei a logica anterior para caso queira mudar
          * a nota máxima e mínima, a lógica de "AI" continue funcionando
          */
-        if (avaliarSituacao(notaFinal).equalsIgnoreCase("EM RECUPERAÇÃO") && estaApto ) {
-            gerarProvaAI();
-            mostrarSituacaoCompleta();
+        if (avaliarSituacao(notaFinal).equalsIgnoreCase("EM RECUPERAÇÃO") && estaApto) {
+            // Verifica se o aluno ja fez a prova, caso sim,
+            // não pode refazer a prova "AI"
+            if (hasAlreadyTaken) {
+                mostrarSituacaoCompleta();
+            } else {
+                gerarProvaAI();
+                mostrarSituacaoCompleta();
+            }
         }
-
-
     } // Fim do método mostrarNotas()
 
 
@@ -131,16 +156,23 @@ public class DesafioFinalProf {
     static void mostrarMenu() {
 
         System.out.println("\n\n");
-        System.out.println("\t\tMENU");
-        System.out.println();
-
-        System.out.println("[1] Cadastrar Notas A1");
-        System.out.println("[2] Cadastrar Nota A2");
-        System.out.println("[3] Cadastrar Nota A3");
-        System.out.println("[4] Mostrar Notas");
-        System.out.println("[0] SAIR");
-
-        System.out.print("\nDigite uma opcão:  ");
+//        System.out.println("-----------------------------------------");
+        System.out.println("""
+                -----------------------------------------
+                |              <__Menu__>               |
+                -----------------------------------------
+                | [1] - Cadastrar Notas A1             |
+                -----------------------------------------
+                | [2] - Cadastrar Nota A2              |
+                -----------------------------------------
+                | [3] - Cadastrar Nota A3              |
+                -----------------------------------------
+                | [4] - Mostrar Notas                  |
+                -----------------------------------------
+                | [0] - Sair                           |
+                -----------------------------------------
+                """);
+        System.out.print("Digite uma das opcoes:  ");
         byte opcao = console.nextByte();
 
 
@@ -187,20 +219,19 @@ public class DesafioFinalProf {
     }
 
     static String maiorNota(double[] notas) {
-        int maxIndex = 0;
+        String maiorNota = "";
+        double verificarMaior = 0;
 
-        for (int i = 0; i < TOTAL_AVALIACOES - 1; i++) {
-            if (notas[i] < notas[i + 1]) {
-                maxIndex = i + 1;
-            } else {
-                maxIndex = i;
+        for (int i = 0; i < TOTAL_AVALIACOES; i++) {
+            if (notas[i] > verificarMaior) {
+                verificarMaior = notas[i];
+                maiorNota = NOMES_AVALIACOES[i];
             }
         }
-
-        return NOMES_AVALIACOES[maxIndex];
+        return maiorNota;
     }
 
-    static int menorNota(double[] notas) {
+    static int indexMenorNota(double[] notas) {
         int indexMenorNota = 0;
 
         if (notas[0] > notas[1]) {
