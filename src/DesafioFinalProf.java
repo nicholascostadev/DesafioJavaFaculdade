@@ -68,17 +68,32 @@ public class DesafioFinalProf {
      */
 
     static void calcularTotal() {
-        notaFinal = 0.00;
         // resetar o valor da variável quando
         // for calcular o total novamente
+        notaFinal = 0.00;
+
         for (int i = 0; i < TOTAL_AVALIACOES; i++) {
 
-            System.out.printf("Avaliacão %s = %.2f pts", NOMES_AVALIACOES[i], notas[i]);
-            System.out.println();
+            System.out.printf("\nAvaliacao %s = %.2f pts", NOMES_AVALIACOES[i], notas[i]);
             notaFinal += notas[i];
 
         }
     }
+
+    static void gerarProvaAI() {
+        System.out.print("\nColoque a nova nota da AI: ");
+        double AI = console.nextDouble();
+        notas[menorNota(notas)] = AI;
+        calcularTotal();
+    }
+
+    static void mostrarSituacaoCompleta() {
+        System.out.printf("\n\nNota Final = %.2f pts", notaFinal);
+        System.out.printf("\nSituacao = %s, sua menor nota foi de %.2f pontos", avaliarSituacao(notaFinal), notas[menorNota(notas)]);
+        System.out.printf("\nSua media foi de: %.2f ", calcularMedia(notas));
+        System.out.printf("\nSua prova com maior nota foi a: %s ", maiorNota(notas));
+    }
+
 
     static void mostrarNotas() {
 
@@ -88,24 +103,22 @@ public class DesafioFinalProf {
 
         calcularTotal();
 
+        mostrarSituacaoCompleta();
 
-        System.out.printf("\nNota Final = %.2f pts", notaFinal);
-        System.out.printf("\n\nSituacao = %s, sua menor nota foi de %.2f pontos", avaliarSituacao(notaFinal), notas[menorNota(notas)]);
-        System.out.printf("\nSua media foi de: %.2f ", calcularMedia(notas));
-        System.out.printf("\nSua prova com maior nota foi a: %s ", maiorNota(notas));
-        // Se estiver em recuperacao, uma prova a mais é feita
-        // Aproveitei a logica anterior para caso queira mudar
-        // a nota máxima e mínima, a lógica de "AI" continue funcionando
-        if (avaliarSituacao(notaFinal).equalsIgnoreCase("EM RECUPERAÇÃO")) {
-            System.out.print("\nColoque a nova nota da AI: ");
-            double AI = console.nextDouble();
-            notas[menorNota(notas)] = AI;
-            calcularTotal();
+        /*
+         * Verificar se alguma das notas A1 ou A2 foram abaixo de 30
+         * para assim permitir ele fazer a prova AI
+         */
+        boolean estaApto = (notas[0] + notas[1]) < 60;
 
-            System.out.printf("\nNota Final = %.2f pts", notaFinal);
-            System.out.printf("\n\nSituacao = %s", avaliarSituacao(notaFinal));
-            System.out.printf("\nSua media foi de: %.2f ", calcularMedia(notas));
-            System.out.printf("\nSua prova com maior nota foi a: %s ", maiorNota(notas));
+        /*
+         * Se estiver em recuperacao, uma prova a mais é feita
+         * Aproveitei a logica anterior para caso queira mudar
+         * a nota máxima e mínima, a lógica de "AI" continue funcionando
+         */
+        if (avaliarSituacao(notaFinal).equalsIgnoreCase("EM RECUPERAÇÃO") && estaApto ) {
+            gerarProvaAI();
+            mostrarSituacaoCompleta();
         }
 
 
@@ -189,10 +202,9 @@ public class DesafioFinalProf {
 
     static int menorNota(double[] notas) {
         int indexMenorNota = 0;
-        for (int i = 0; i < 1; i++) { // compara com a primeira e segunda apenas
-            if (notas[i] > notas[i + 1]) {
-                indexMenorNota = i + 1;
-            }
+
+        if (notas[0] > notas[1]) {
+            indexMenorNota = 1;
         }
 
         return indexMenorNota;
