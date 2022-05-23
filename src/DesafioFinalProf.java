@@ -203,9 +203,7 @@ public class DesafioFinalProf extends RuntimeException {
                 break;
 
         }
-
         mostrarMenu();
-
     } // Fim do método mostrarMenu()
 
     static double calcularMedia(double[] notas) {
@@ -220,11 +218,11 @@ public class DesafioFinalProf extends RuntimeException {
 
     static String maiorNota(double[] notas) {
         String maiorNota = "";
-        double verificarMaior = 0;
+        double verificadorMaior = 0;
 
         for (int i = 0; i < TOTAL_AVALIACOES; i++) {
-            if (notas[i] > verificarMaior) {
-                verificarMaior = notas[i];
+            if (notas[i] > verificadorMaior) {
+                verificadorMaior = notas[i];
                 maiorNota = NOMES_AVALIACOES[i];
             }
         }
