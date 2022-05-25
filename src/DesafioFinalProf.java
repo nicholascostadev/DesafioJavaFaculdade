@@ -55,12 +55,19 @@ public class DesafioFinalProf extends RuntimeException {
      */
     static String avaliarSituacao(double notaFinal) {
 
-        if (notaFinal < 30)
-            return "REPROVADO";
-        else if (notaFinal < 70)
-            return "EM RECUPERAÇÃO";
-        else
-            return "APROVADO";
+        if(!hasAlreadyTaken) {
+            if (notaFinal < 30)
+                return "REPROVADO";
+            else if (notaFinal < 70)
+                return "EM RECUPERAÇÃO";
+            else
+                return "APROVADO";
+        } else {
+            if (notaFinal < 70)
+                return "REPROVADO";
+            else
+                return "APROVADO";
+        }
 
     } // Fim do método avaliarSituacao()
 
@@ -93,8 +100,8 @@ public class DesafioFinalProf extends RuntimeException {
         notas[indexMenorNota(notas)] = Math.max(notas[indexMenorNota(notas)], AI);
 
         calcularTotal();
-        hasAlreadyTaken = true;
 
+        hasAlreadyTaken = true;
     }
 
     static void mostrarSituacaoCompleta() {
@@ -122,6 +129,7 @@ public class DesafioFinalProf extends RuntimeException {
                 |               Notas                   |
                 -----------------------------------------
                 """);
+
         calcularTotal();
 
         mostrarSituacaoCompleta();
